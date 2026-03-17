@@ -19,6 +19,12 @@
 
 set -e
 
+post_create_marker="/workspace/.post-create-vm-ready.done"
+if [ -x /workspace/bin/post_create_vm_ready.sh ] && [ ! -f "$post_create_marker" ]; then
+    /workspace/bin/post_create_vm_ready.sh
+    touch "$post_create_marker"
+fi
+
 uv sync --locked --extra=${CUDA_NAME} || true
 
 exec "$@"
