@@ -4,6 +4,7 @@
 
 - [System Requirements](#system-requirements)
 - [Installation](#installation)
+- [Brev Launchable Post-Create Hook](#brev-launchable-post-create-hook)
 - [Downloading Checkpoints](#downloading-checkpoints)
 
 <!--TOC-->
@@ -115,3 +116,19 @@ sudo systemctl restart docker
 4. Accept the [NVIDIA Open Model License Agreement](https://huggingface.co/nvidia/Cosmos-Guardrail1).
 
 Checkpoints are automatically downloaded during inference and post-training. To modify the checkpoint cache location, set the [`HF_HOME`](https://huggingface.co/docs/huggingface_hub/en/package_reference/environment_variables#hfhome) environment variable.
+
+## Brev Launchable Post-Create Hook
+
+For this repository's representation-first architecture (encoder-only extraction, no diffusion decode loop), use the post-create script below as your Brev "run after VM is ready" command:
+
+```bash
+/workspace/bin/post_create_vm_ready.sh
+```
+
+What it does:
+
+1. `git lfs pull` to fetch large tracked assets.
+2. `uv sync --locked --extra=${CUDA_NAME:-cu128}` to install pinned dependencies.
+3. `python scripts/check_environment.py` when a GPU is visible.
+
+The Docker entrypoint also runs this script once (using `/workspace/.post-create-vm-ready.done`) to ensure launchable environments are initialized consistently.
