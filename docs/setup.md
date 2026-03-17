@@ -119,7 +119,7 @@ Checkpoints are automatically downloaded during inference and post-training. To 
 
 ## Brev Launchable Post-Create Hook
 
-For this repository's representation-first architecture (encoder-only extraction, no diffusion decode loop), use the post-create script below as your Brev "run after VM is ready" command:
+Use the post-create script below as your Brev "run after VM is ready" command:
 
 ```bash
 /workspace/bin/post_create_vm_ready.sh
